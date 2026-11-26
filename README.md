@@ -164,32 +164,34 @@ The repository includes a static Vercel frontend configuration (`vercel.json`) a
 ### Deploy the backend to Render
 
 1. Push this project to a Git provider and create a Render **Blueprint** from the repository, selecting `render.yaml`. Alternatively, create a Node web service with **Root Directory** `backend`, **Build Command** `npm ci && npm run build`, **Start Command** `npm start`, and **Health Check Path** `/api/health`.
-2. Set `FLAGPILOT_CORS_ORIGINS` to the exact deployed frontend origin, such as `https://your-project.vercel.app`. Do not add a path or trailing slash. Add additional exact origins as a comma-separated list if needed; wildcard origins are not supported.
-3. If enabling Live Mode, set only the needed `FLAGSMITH_*_ENVIRONMENT_KEY` values to the Flags API Environment Keys for the corresponding aliases. These keys are public Flagsmith SDK keys, not privileged Management API tokens. Leave them unset to deploy the backend health endpoint without Flagsmith connectivity. `FLAGSMITH_API_URL` defaults to Flagsmith Cloud; use a valid HTTPS API v1 URL for a self-hosted instance.
+2. The production frontend origin is `https://flagpilot.vercel.app`. The Render blueprint sets `FLAGPILOT_CORS_ORIGINS` to that exact origin; if configuring the service manually instead, set that variable to `https://flagpilot.vercel.app` (no path or trailing slash). Add any additional exact preview origins as a comma-separated list; wildcard origins are not supported.
+3. If enabling Live Mode, set only the needed `FLAGSMITH_*_ENVIRONMENT_KEY` values to the Flags API Environment Keys for the corresponding aliases. These keys are public Flagsmith SDK keys, not privileged Management API tokens, and must be configured on Render only. Leave them unset to deploy the backend health endpoint without Flagsmith connectivity. `FLAGSMITH_API_URL` defaults to Flagsmith Cloud; use a valid HTTPS API v1 URL for a self-hosted instance.
 4. Render supplies `PORT`; the service binds to `HOST=0.0.0.0` as configured in the blueprint. Confirm the deployed `https://<service>.onrender.com/api/health` returns `{"status":"ok","service":"flagpilot-backend"}`.
 
 ### Deploy the frontend to Vercel
 
 1. Import the repository into Vercel using the project root as the **Root Directory**. `vercel.json` runs `npm run build:frontend`, serves `dist`, and routes application paths to the SPA entry point. The backend is deployed separately.
-2. Add the build-time environment variable `VITE_FLAGPILOT_BACKEND_URL=https://<service>.onrender.com` (origin only, no path or trailing slash). This is a public backend URL, never a secret. Redeploy after changing it because Vite embeds `VITE_*` values into the frontend build.
-3. Copy the exact Vercel production origin into the backend's `FLAGPILOT_CORS_ORIGINS` and redeploy the backend. Vercel preview URLs are different origins; add each required preview origin explicitly or use the deployed production URL for the demo.
+2. In Vercel **Project Settings → Environment Variables**, set the Production build variable `VITE_FLAGPILOT_BACKEND_URL=https://flagpilot-vrbb.onrender.com`. This is a public backend URL, never a secret. Do not put any Flagsmith Environment Key or token in a `VITE_*` variable. Redeploy after changing it because Vite embeds `VITE_*` values into the frontend build.
+3. The exact production frontend origin is `https://flagpilot.vercel.app`; it is configured in `render.yaml` as `FLAGPILOT_CORS_ORIGINS`. Apply/sync the updated blueprint and redeploy the Render service. For a manually managed Render service, set the same variable to that origin. Vercel preview URLs are different origins; add each required preview origin explicitly or use the deployed production URL for the demo.
 4. Open the Vercel URL. Demo Mode is immediately available. To use Live Mode, open **Settings → Flagsmith connection**, select the matching local environment alias, and connect to the configured backend. Successful status is shown only after a real backend evaluation succeeds.
 
 The production frontend has no implicit localhost backend URL. If `VITE_FLAGPILOT_BACKEND_URL` is absent, Demo Mode remains available and the Settings form asks for a backend URL before attempting Live Mode. If the hosted backend sleeps or is temporarily unavailable, Live Mode reports the connection error and does not substitute demo flags as live results. Render's free service may cold-start after inactivity, so the first connection or health request can take longer.
+
+The frontend remains in **Demo Mode** until someone explicitly connects in Settings. A configured backend URL alone does not activate Live Mode. Live Mode is shown only after the backend successfully verifies the selected Flagsmith environment; backend unavailability, CORS rejection, missing keys, upstream failures, and timeouts are surfaced as connection errors without falling back to demo flags.
 
 ### Deployment variables and troubleshooting
 
 | Variable | Where | Purpose |
 |---|---|---|
-| `VITE_FLAGPILOT_BACKEND_URL` | Vercel build environment | Public HTTPS origin for the FlagPilot backend |
+| `VITE_FLAGPILOT_BACKEND_URL` | Vercel Production build environment | `https://flagpilot-vrbb.onrender.com` |
 | `HOST` | Render backend | Bind address; use `0.0.0.0` for hosted networking |
 | `PORT` | Render backend | Assigned by Render; do not hardcode a production port |
 | `TRUST_PROXY_HOPS` | Render backend | Trusted proxy count; use `1` only behind Render's ingress proxy |
-| `FLAGPILOT_CORS_ORIGINS` | Render backend | Comma-separated exact browser origins allowed by CORS |
+| `FLAGPILOT_CORS_ORIGINS` | Render backend (set by `render.yaml`) | `https://flagpilot.vercel.app` (plus any explicitly required preview origins) |
 | `FLAGSMITH_API_URL` | Render backend, optional | Flagsmith API v1 URL; defaults to Flagsmith Cloud |
 | `FLAGSMITH_DEVELOPMENT_ENVIRONMENT_KEY` | Render backend, optional | Environment Key for the Development alias |
 | `FLAGSMITH_STAGING_ENVIRONMENT_KEY` | Render backend, optional | Environment Key for the Staging alias |
-| `FLAGSMITH_PRODUCTION_ENVIRONMENT_KEY` | Render backend, optional | Environment Key for the Production alias |
+| `FLAGSMITH_PRODUCTION_ENVIRONMENT_KEY` | Render backend only, optional for Flagsmith Live Mode | Environment Key for the Production alias; never set in Vercel or a `VITE_*` variable |
 
 - **CORS/network error:** Verify the frontend URL exactly matches one entry in `FLAGPILOT_CORS_ORIGINS`, including scheme and hostname. Then redeploy the backend.
 - **Live connection reports missing configuration:** Verify the selected alias has its matching Environment Key set on Render. The backend health endpoint can be healthy even when no Flagsmith keys are configured.
