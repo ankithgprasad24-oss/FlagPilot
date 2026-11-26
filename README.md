@@ -164,7 +164,7 @@ The repository includes a static Vercel frontend configuration (`vercel.json`) a
 ### Deploy the backend to Render
 
 1. Push this project to a Git provider and create a Render **Blueprint** from the repository, selecting `render.yaml`. Alternatively, create a Node web service with **Root Directory** `backend`, **Build Command** `npm ci && npm run build`, **Start Command** `npm start`, and **Health Check Path** `/api/health`.
-2. The production frontend origin is `https://flagpilot.vercel.app`. The Render blueprint sets `FLAGPILOT_CORS_ORIGINS` to that exact origin; if configuring the service manually instead, set that variable to `https://flagpilot.vercel.app` (no path or trailing slash). Add any additional exact preview origins as a comma-separated list; wildcard origins are not supported.
+2. The production frontend origin is `https://flag-pilot-flax.vercel.app`. The Render blueprint sets `FLAGPILOT_CORS_ORIGINS` to that exact origin; if configuring the service manually instead, set that variable to `https://flag-pilot-flax.vercel.app` (no path or trailing slash). Add any additional exact preview origins as a comma-separated list; wildcard origins are not supported.
 3. If enabling Live Mode, set only the needed `FLAGSMITH_*_ENVIRONMENT_KEY` values to the Flags API Environment Keys for the corresponding aliases. These keys are public Flagsmith SDK keys, not privileged Management API tokens, and must be configured on Render only. Leave them unset to deploy the backend health endpoint without Flagsmith connectivity. `FLAGSMITH_API_URL` defaults to Flagsmith Cloud; use a valid HTTPS API v1 URL for a self-hosted instance.
 4. Render supplies `PORT`; the service binds to `HOST=0.0.0.0` as configured in the blueprint. Confirm the deployed `https://<service>.onrender.com/api/health` returns `{"status":"ok","service":"flagpilot-backend"}`.
 
@@ -172,7 +172,7 @@ The repository includes a static Vercel frontend configuration (`vercel.json`) a
 
 1. Import the repository into Vercel using the project root as the **Root Directory**. `vercel.json` runs `npm run build:frontend`, serves `dist`, and routes application paths to the SPA entry point. The backend is deployed separately.
 2. In Vercel **Project Settings → Environment Variables**, set the Production build variable `VITE_FLAGPILOT_BACKEND_URL=https://flagpilot-vrbb.onrender.com`. This is a public backend URL, never a secret. Do not put any Flagsmith Environment Key or token in a `VITE_*` variable. Redeploy after changing it because Vite embeds `VITE_*` values into the frontend build.
-3. The exact production frontend origin is `https://flagpilot.vercel.app`; it is configured in `render.yaml` as `FLAGPILOT_CORS_ORIGINS`. Apply/sync the updated blueprint and redeploy the Render service. For a manually managed Render service, set the same variable to that origin. Vercel preview URLs are different origins; add each required preview origin explicitly or use the deployed production URL for the demo.
+3. The exact production frontend origin is `https://flag-pilot-flax.vercel.app`; it is configured in `render.yaml` as `FLAGPILOT_CORS_ORIGINS`. Apply/sync the updated blueprint and redeploy the Render service. For a manually managed Render service, set the same variable to that origin. Vercel preview URLs are different origins; add each required preview origin explicitly or use the deployed production URL for the demo.
 4. Open the Vercel URL. Demo Mode is immediately available. To use Live Mode, open **Settings → Flagsmith connection**, select the matching local environment alias, and connect to the configured backend. Successful status is shown only after a real backend evaluation succeeds.
 
 The production frontend has no implicit localhost backend URL. If `VITE_FLAGPILOT_BACKEND_URL` is absent, Demo Mode remains available and the Settings form asks for a backend URL before attempting Live Mode. If the hosted backend sleeps or is temporarily unavailable, Live Mode reports the connection error and does not substitute demo flags as live results. Render's free service may cold-start after inactivity, so the first connection or health request can take longer.
@@ -187,7 +187,7 @@ The frontend remains in **Demo Mode** until someone explicitly connects in Setti
 | `HOST` | Render backend | Bind address; use `0.0.0.0` for hosted networking |
 | `PORT` | Render backend | Assigned by Render; do not hardcode a production port |
 | `TRUST_PROXY_HOPS` | Render backend | Trusted proxy count; use `1` only behind Render's ingress proxy |
-| `FLAGPILOT_CORS_ORIGINS` | Render backend (set by `render.yaml`) | `https://flagpilot.vercel.app` (plus any explicitly required preview origins) |
+| `FLAGPILOT_CORS_ORIGINS` | Render backend (set by `render.yaml`) | `https://flag-pilot-flax.vercel.app` (plus any explicitly required preview origins) |
 | `FLAGSMITH_API_URL` | Render backend, optional | Flagsmith API v1 URL; defaults to Flagsmith Cloud |
 | `FLAGSMITH_DEVELOPMENT_ENVIRONMENT_KEY` | Render backend, optional | Environment Key for the Development alias |
 | `FLAGSMITH_STAGING_ENVIRONMENT_KEY` | Render backend, optional | Environment Key for the Staging alias |

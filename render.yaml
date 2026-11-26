@@ -17,7 +17,7 @@ services:
       - key: TRUST_PROXY_HOPS
         value: "1"
       - key: FLAGPILOT_CORS_ORIGINS
-        value: https://flagpilot.vercel.app
+        value: https://flag-pilot-flax.vercel.app
       - key: FLAGSMITH_API_URL
         value: https://edge.api.flagsmith.com/api/v1/
       - key: FLAGSMITH_ENVIRONMENT_NAME

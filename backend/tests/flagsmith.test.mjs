@@ -257,15 +257,15 @@ test('endpoints report empty configured environments accurately and reject unava
 
 test('health endpoint is available and CORS allows only configured frontend origins', async () => {
   const currentConfig = config({
-    FLAGPILOT_CORS_ORIGINS: 'https://flagpilot.vercel.app',
+    FLAGPILOT_CORS_ORIGINS: 'https://flag-pilot-flax.vercel.app',
   })
   const baseUrl = await listen(createApp(currentConfig, flagsmithService(new Response('[]', { status: 200 }))))
 
   const allowed = await fetch(`${baseUrl}/api/health`, {
-    headers: { Origin: 'https://flagpilot.vercel.app' },
+    headers: { Origin: 'https://flag-pilot-flax.vercel.app' },
   })
   assert.equal(allowed.status, 200)
-  assert.equal(allowed.headers.get('access-control-allow-origin'), 'https://flagpilot.vercel.app')
+  assert.equal(allowed.headers.get('access-control-allow-origin'), 'https://flag-pilot-flax.vercel.app')
   assert.deepEqual(await allowed.json(), { status: 'ok', service: 'flagpilot-backend' })
 
   const denied = await fetch(`${baseUrl}/api/health`, {
@@ -281,11 +281,11 @@ test('backend configuration supports hosted bind address and platform-assigned p
   const hostedConfig = config({
     HOST: '0.0.0.0',
     PORT: '10000',
-    FLAGPILOT_CORS_ORIGINS: 'https://flagpilot.vercel.app',
+    FLAGPILOT_CORS_ORIGINS: 'https://flag-pilot-flax.vercel.app',
   })
   assert.equal(hostedConfig.host, '0.0.0.0')
   assert.equal(hostedConfig.port, 10000)
-  assert.deepEqual([...hostedConfig.allowedOrigins], ['https://flagpilot.vercel.app'])
+  assert.deepEqual([...hostedConfig.allowedOrigins], ['https://flag-pilot-flax.vercel.app'])
   assert.equal(hostedConfig.trustProxyHops, 0)
 })
 
