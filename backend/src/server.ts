@@ -150,8 +150,9 @@ export function createApp(config: BackendConfig, flagsmith: FlagsmithApi = new F
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const config = loadConfig()
   const app = createApp(config)
-  app.listen(config.port, config.host, () => {
-    console.info(`FlagPilot backend listening on ${config.host}:${config.port}`)
+  const port = process.env.PORT ? Number(process.env.PORT) : 3002
+  app.listen(port, '0.0.0.0', () => {
+    console.info(`FlagPilot backend listening on 0.0.0.0:${port}`)
     if (Object.values(config.environmentKeys).every((key) => key.length === 0)) {
       console.info('Flagsmith is not configured. Set one or more Environment Keys in backend/.env to enable Live Mode.')
     }
