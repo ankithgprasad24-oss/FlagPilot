@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: flagpilot-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: TRUST_PROXY_HOPS
+        value: "1"
+      - key: FLAGPILOT_CORS_ORIGINS
+        sync: false
+      - key: FLAGSMITH_API_URL
+        value: https://edge.api.flagsmith.com/api/v1/
+      - key: FLAGSMITH_ENVIRONMENT_NAME
+        value: Production
+      - key: FLAGSMITH_DEVELOPMENT_ENVIRONMENT_KEY
+        sync: false
+      - key: FLAGSMITH_STAGING_ENVIRONMENT_KEY
+        sync: false
+      - key: FLAGSMITH_PRODUCTION_ENVIRONMENT_KEY
+        sync: false

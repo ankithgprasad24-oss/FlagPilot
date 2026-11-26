@@ -1,0 +1,33 @@
+{
+  "flag": {
+    "name": "Checkout v2",
+    "purpose": "Gradually release the redesigned checkout flow.",
+    "key": "checkout_v2",
+    "enabled": true,
+    "rolloutPercent": 25,
+    "targetEnvironment": "Production",
+    "configuration": {
+      "configuredInEnvironment": true,
+      "targetingRuleCount": 1
+    }
+  },
+  "recentChanges": [],
+  "metrics": {
+    "errorRatePercent": 0.4,
+    "latencyMs": 190,
+    "conversionRatePercent": 3.2,
+    "successfulRequests": 9970,
+    "failedRequests": 30
+  },
+  "baseline": {
+    "errorRatePercent": 0.3,
+    "latencyMs": 185,
+    "conversionRatePercent": 3.1
+  },
+  "riskAssessment": {
+    "level": "Low",
+    "score": 18,
+    "reasons": ["No material regression was reported."]
+  },
+  "dataProvenance": "real"
+}

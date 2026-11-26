@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #e8e7ed;
+  background: #0d0e13;
+  --text-caption: 0.8125rem;
+  --text-ui: 0.875rem;
+  --text-body: 0.9375rem;
+  --text-section: 1.125rem;
+  --text-title: 1.5rem;
+  --text-display: 1.875rem;
+  --text-muted: #9c9aa7;
+  --surface-canvas: #0d0e13;
+  --surface-sidebar: #101116;
+  --surface-panel: #14151b;
+  --surface-raised: #191a21;
+  --border-subtle: #292a33;
+  --border-strong: #383944;
+  --accent-primary: #9478ed;
+  --accent-text: #c1b0ff;
+  --radius-control: 0.625rem;
+  --radius-card: 0.75rem;
+  --radius-panel: 0.875rem;
+  --shadow-panel: 0 8px 24px rgb(0 0 0 / 12%);
+  --shadow-popover: 0 16px 40px rgb(0 0 0 / 32%);
+  --transition-ui: 160ms ease;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+  font-weight: 400;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: #0d0e13;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: 1.5;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgb(148 120 237 / 18%);
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  accent-color: var(--accent-primary);
+}
+
+button:not(:disabled),
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+::placeholder {
+  color: #a09eaa;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+::selection {
+  color: #fff;
+  background: #7459c6;
+}
