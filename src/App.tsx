@@ -496,7 +496,7 @@ function App() {
       {mobileNav && <button aria-label="Close navigation" className="mobile-backdrop" onClick={() => setMobileNav(false)} />}
       <aside className={`sidebar ${mobileNav ? 'sidebar-open' : ''}`}>
         <div className="brand-row"><div className="brand-mark"><Command size={17} strokeWidth={2.5} /></div><span className="brand-name">flagpilot</span><span className="brand-tag">BETA</span><button className="sidebar-collapse" aria-label="Close menu" onClick={() => setMobileNav(false)}><X size={16} /></button></div>
-        <button className="workspace-switch" onClick={() => setProfileOpen(!profileOpen)}><span className="workspace-glyph">N</span><span className="workspace-text"><b>Northstar Labs</b><small>Pro workspace</small></span><ChevronDown size={15} /></button>
+        <button className="workspace-switch" onClick={() => setProfileOpen(!profileOpen)}><span className="workspace-glyph">F</span><span className="workspace-text"><b>FlagForge</b><small>Pro workspace</small></span><ChevronDown size={15} /></button>
         <div className="nav-scroll">
           {navItems.map(({ label, icon: Icon, section }) => <div key={label}>
             {section && <div className="nav-section">{section}</div>}
@@ -514,7 +514,7 @@ function App() {
       <main className="main-area">
         <header className="topbar">
           <button className="mobile-menu" aria-label="Open navigation" onClick={() => setMobileNav(true)}><Menu size={19} /></button>
-          <div className="breadcrumbs"><span>Northstar Labs</span><ChevronRight size={14} /><b>{page}</b></div>
+          <div className="breadcrumbs"><span>FlagForge</span><ChevronRight size={14} /><b>{page}</b></div>
           <div className="topbar-actions">
             <label className="global-search"><Search size={15} /><input value={query} onChange={(event) => { setQuery(event.target.value); if (event.target.value) setPage('Feature Flags') }} placeholder="Search anything..." /><kbd>⌘ K</kbd></label>
             <div className="top-divider" />
@@ -885,7 +885,7 @@ function SettingsPage({ environment, setEnvironment, readOnly, profileName, setP
       </section>
       <section className="panel settings-panel">
         <div className="settings-section-head"><div><h2>Workspace</h2><p>Configure how FlagPilot behaves for this workspace.</p></div><span className="workspace-glyph large">N</span></div>
-        <div className="setting-row"><div><b>Workspace name</b><span>The name your team sees across FlagPilot.</span></div><input value="Northstar Labs" readOnly aria-label="Workspace name" /></div>
+        <div className="setting-row"><div><b>Workspace name</b><span>The name your team sees across FlagPilot.</span></div><input value="FlagForge" readOnly aria-label="Workspace name" /></div>
         <div className="setting-row"><div><b>{readOnly ? 'Flagsmith environment' : 'Default environment'}</b><span>{readOnly ? 'Select a local alias mapped to a Flags API Environment Key in backend configuration.' : 'Choose which environment opens by default.'}</span></div><select value={environment} onChange={(event) => { setEnvironment(event.target.value as Environment); onToast(`${readOnly ? 'Flagsmith environment switched to' : 'Default environment set to'} ${event.target.value}`) }}>{environments.map((env) => <option key={env}>{env}</option>)}</select></div>
         <div className="setting-row"><div><b>Release notifications</b><span>Get notified when a release needs attention.</span></div><Toggle checked={notificationsEnabled} onChange={() => { const enabled = !notificationsEnabled; setNotificationsEnabled(enabled); onToast(`Release notifications ${enabled ? 'enabled' : 'disabled'}`) }} label="Release notifications" /></div>
       </section>
@@ -896,3 +896,5 @@ function SettingsPage({ environment, setEnvironment, readOnly, profileName, setP
 }
 
 export default App
+
+
